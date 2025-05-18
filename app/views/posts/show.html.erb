@@ -1,0 +1,7 @@
+<h1> <%= @post.title %> </h1>
+<p> <%= @post.user_id %> </p>
+
+<p> <% @post.body %> </p>
+
+<h2>Comments</h2>
+<%= render @post.comments %>""

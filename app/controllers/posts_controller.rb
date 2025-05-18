@@ -1,18 +1,29 @@
 class PostsController < ApplicationController
   def show
-    @posts = Post.belongs_to(params[:id])
+    @posts = Post.find(params[:user_id])
   end
   def new
-    @post = Post.new
+    @user = User.find(params[:user_id])
+    if @user.nil?
+      redirect_to users_path, alert: "User not found"
+    else
+      @post = @user.posts.build
+    end
   end
 
   def create
-    @post = Post.new(title: "...", body: "...")
+    @user = User.find(params[:user_id])
+    @post = @user.posts.build(post_params)
 
     if @post.save
-      redirect_to @post
+      redirect_to user_path(@user)
     else
-      render :new, status: :unprocessable_entity
+      render :new
     end
+  end
+
+  private
+  def post_params
+    params.require(:post).permit(:title, :body)
   end
 end
